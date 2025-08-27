@@ -2,7 +2,6 @@ version: 2.1
 orbs:
   node: circleci/node@4.2.0
   aws-cli: circleci/aws-cli@2.0.0
-
 jobs:
   frontend:
     working_directory: ~/app/udagram-frontend
@@ -11,27 +10,22 @@ jobs:
       - checkout:
           path: ~/app
       - node/install-packages:
-          app-dir: udagram-frontend
+          app-dir: ~/app/udagram-frontend
       - run:
           name: Build Frontend
           command: npm run build
       - aws-cli/install
       - run:
           name: Deploy Frontend
-          command: aws s3 cp --recursive --acl public-read ./www s3://unique97
-
+          command: aws s3 cp --recursive --acl public-read ./www unique97
   server:
     working_directory: ~/app/udagram-api
     executor: node/default
-    environment:
-      EB_APP: udagram-api
-      EB_BUCKET: unique97
-      EB_ENV: Udagram-env
     steps:
       - checkout:
           path: ~/app
       - node/install-packages:
-          app-dir: udagram-api
+          app-dir: ~/app/udagram-api
       - run:
           name: Build and Archive Server
           command: |-
@@ -42,9 +36,9 @@ jobs:
       - run:
           name: Deploy Server
           command: |-
-            aws s3 cp ./www/Archive.zip s3://unique97
-            aws elasticbeanstalk create-application-version --application-name udagram-api --version-label <<pipeline.git.revision>> --source-bundle S3Bucket="unique97",S3Key="Archive.zip"
-            aws elasticbeanstalk update-environment --application-name udagram-api --environment-name Udagram-env --version-label <<pipeline.git.revision>>
+            aws s3 cp ./www/Archive.zip unique97
+            aws elasticbeanstalk create-application-version --application-name Udagram --version-label <<pipeline.git.revision>> --source-bundle S3Bucket="unique97",S3Key="Archive.zip"
+            aws elasticbeanstalk update-environment --application-name Udagram --environment-name Udagram-env  --version-label <<pipeline.git.revision>>
 
 workflows:
   build_and_deploy:
