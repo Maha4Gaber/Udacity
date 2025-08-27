@@ -43,14 +43,18 @@ jobs:
             npm run archive
       - aws-cli/install
       - run:
+          name: Configure AWS Profile
+          command: |
+            aws configure set aws_access_key_id ASIAQNQIHMGR5NAWKRMX --profile swaves
+            aws configure set aws_secret_access_key MCFtSigLRmXW3rfcqTqoxYS4JFipUKFVLxbBeZlN --profile swaves
+            aws configure set aws_session_token IQoJb3JpZ2luX2VjEDAaCXVzLXdlc3QtMiJIMEYCIQDz2GqRW2ezUrZE0FnQZOHMLm4nf1KT7vOGtopw51KjFgIhAMORPgG+tYBfL0jXH1loSxKbu7/YhWhiYEg0hh1uUYb1KscCCIn//////////wEQAhoMMDI5MDA4MjkwMjExIgxXWKd8e1cy1AtvbywqmwLobAxM79zGbLEAkhgZAUHYq8iNvpizyuEWLMvkcrGyr+NukmrHIIwY8qYWjSENxNEjqJ1OqhRzQvoqQCXRhmlJhaMH0ld4pcX+6HSf9f2cq5odNpgWSrp3IquV7NPZyHxf5R54QxBniO4VuwekNZP3APxxoVUghv8KZ6BHczvfNqWrRuKL+/pfIqEfOAnsPF3qDI6odNTMABayySv07pXQcLYciqH9kWhAPwYHwJqPBn1J+JdBXcAMkxFY2dbTa/UbUYCyplyV9yiPWchFc6wq/2mwAoMaFGnntY0eoZDwhNxQjo2k+YZr+hvymWwmjKVJA7Ssy9QITVi1SvtUR9IBdeHBGZc5BJRkUBM0a9B3rrGDk3gLrb433+GOMOjkusUGOpwBaxXB8/uX0XLaqIpaBETPwvbvF/KQ1RZ0E1IkMkWF+zHouUb3f3myx3UmOCnsBBi9bDqz0PLEYntDCrecGKQiRo5RmLe9bDbFfQiePQuuYzr5rLkTZa6a8wWgPz70W8mAbRryN/ZcxZtjbHrzlmtPH61PM67d6nIWYsD22VQinBMSYJM1tEvaBE5grppRUQ8HHyxUGo6KqktmFCA3 --profile swaves
+            aws configure set region us-east-1 --profile swaves
+      - run:
           name: Deploy Server
-          command: |-
-            AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID \
-            AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY \
-            AWS_SESSION_TOKEN=$AWS_SESSION_TOKEN \
-            aws s3 cp ./www/Archive.zip s3://unique97/Archive.zip
-            aws elasticbeanstalk create-application-version --application-name Udagram --version-label <<pipeline.git.revision>> --source-bundle S3Bucket="unique97",S3Key="Archive.zip"
-            aws elasticbeanstalk update-environment --application-name Udagram --environment-name Udagram-env --version-label <<pipeline.git.revision>>
+          command: |-        
+            aws s3 cp ./www/Archive.zip s3://unique97/Archive.zip --profile swaves
+            aws elasticbeanstalk create-application-version --application-name Udagram --version-label <<pipeline.git.revision>> --source-bundle S3Bucket="unique97",S3Key="Archive.zip" --profile swaves
+            aws elasticbeanstalk update-environment --application-name Udagram --environment-name Udagram-env --version-label <<pipeline.git.revision>> --profile swaves
 
 workflows:
   build_and_deploy:
