@@ -17,7 +17,7 @@ jobs:
       - aws-cli/install
       - run:
           name: Deploy Frontend
-          command: aws s3 cp --recursive --acl public-read ./www unique97/
+          command: AWS_ACCESS_KEY_ID=ASIAQNQIHMGR5NAWKRMX AWS_SECRET_ACCESS_KEY=MCFtSigLRmXW3rfcqTqoxYS4JFipUKFVLxbBeZlN aws s3 cp --recursive --acl public-read ./www s3://unique97/
   server:
     working_directory: ~/app/udagram-api
     executor: node/default
