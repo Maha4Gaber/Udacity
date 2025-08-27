@@ -25,7 +25,7 @@ jobs:
       - run:
           name: Deploy Frontend
           command: |
-            aws s3 cp --recursive --acl public-read ./www s3://unique97/
+            aws s3 cp --recursive --acl public-read ./www s3://unique97/ --profile swaves
   server:
     working_directory: ~/app/udagram-api
     executor: node/default
