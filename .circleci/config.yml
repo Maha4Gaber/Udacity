@@ -42,7 +42,7 @@ jobs:
           command: |-
             npm run build
             printenv > www/.env
-            npm run archive
+            zip -r www/Archive.zip www
       - aws-cli/install
       - run:
           name: Configure AWS Profile
