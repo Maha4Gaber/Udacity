@@ -26,7 +26,7 @@ jobs:
     environment:
       EB_APP: udagram-api
       EB_BUCKET: unique97
-      EB_ENV: Udagram-api-env
+      EB_ENV: Udagram-env
     steps:
       - checkout:
           path: ~/app
@@ -44,7 +44,7 @@ jobs:
           command: |-
             aws s3 cp ./www/Archive.zip s3://unique97
             aws elasticbeanstalk create-application-version --application-name udagram-api --version-label <<pipeline.git.revision>> --source-bundle S3Bucket="unique97",S3Key="Archive.zip"
-            aws elasticbeanstalk update-environment --application-name udagram-api --environment-name Udagram-api-env --version-label <<pipeline.git.revision>>
+            aws elasticbeanstalk update-environment --application-name udagram-api --environment-name Udagram-env --version-label <<pipeline.git.revision>>
 
 workflows:
   build_and_deploy:
